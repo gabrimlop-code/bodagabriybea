@@ -123,7 +123,7 @@
 <body>
 
     <section class="portada">
-        <h1>Bea y Gabri</h1>
+        <h1>Bea</h1>
         <h1>y</h1>
         <h1>Gabri</h1>
         <h2>"Queremos que seas partícipe del día más importante de nuestras vidas"</h2>
@@ -250,20 +250,35 @@
         });
 
         // Cuenta atrás dinámica
+        // Cuenta atrás dinámica con Minutos y Segundos
         function timer() {
-            const boda = new Date(2026, 4, 2, 13, 0).getTime();
+            const boda = new Date(2026, 4, 2, 13, 0).getTime(); // Mayo es mes 4 en JS
             const ahora = new Date().getTime();
             const diff = boda - ahora;
+
             if (diff <= 0) {
-                document.getElementById("countdown").innerHTML = "¡ES HOY!";
+                document.getElementById("countdown").innerHTML = "¡ES HOY! 🥂";
                 return;
             }
+
+            // Cálculos matemáticos para cada unidad
             const d = Math.floor(diff / (1000 * 60 * 60 * 24));
             const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("countdown").innerHTML = `Faltan ${d} días y ${h} horas`;
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            // Formato visual: añadimos un 0 delante si el número es menor de 10
+            const minutos = m < 10 ? '0' + m : m;
+            const segundos = s < 10 ? '0' + s : s;
+
+            document.getElementById("countdown").innerHTML = 
+                `${d}d ${h}h ${minutos}m ${segundos}s`;
         }
+
+        // Actualizamos cada 1 segundo (1000 milisegundos)
         setInterval(timer, 1000); 
         timer();
     </script>
 </body>
 </html>
+
