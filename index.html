@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boda Bea y Gabri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blanco: rgba(255, 255, 255, 0.95);
+            --dorado: #b59a5d;
+            --oscuro: #2c2c2c;
+            --gris-suave: #f8f9fa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--oscuro);
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            scroll-snap-align: start;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('fondo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .card {
+            background: var(--blanco);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        h1 { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: var(--dorado); margin-bottom: 10px; }
+        .portada h1 { color: white; font-size: 5rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); }
+
+        h2 { font-size: 1.1rem; margin-bottom: 20px; font-weight: 400; color: #555; }
+
+        .btn {
+            background: var(--dorado);
+            color: white;
+            padding: 14px 25px;
+            border-radius: 30px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+            display: inline-block;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add {
+            background: white;
+            border: 2px solid var(--dorado);
+            color: var(--dorado);
+            margin-bottom: 20px;
+        }
+
+        .persona-block {
+            background: var(--gris-suave);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+            border-left: 4px solid var(--dorado);
+            position: relative;
+        }
+
+        .btn-eliminar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #cc0000;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .hidden { display: none; }
+        
+        #countdown {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            margin-top: 30px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <section class="portada">
+        <h1>Gabri   y   Bea</h1>
+        <h2>"Queremos que seas partícipe del día más importante de nuestras vidas"</h2>
+	<h1>2 de mayo 26</h1>
+	<h1>13:00</h1>
+    </section>
+
+ <section>
+        <div class="card">
+            <h1>Ubicación</h1>
+            <h2>Hacienda la Pintada</h2>
+            <p style="color: #666; margin-bottom: 20px;">Carretera de Utrera a Arahal</p>
+            <a href="https://maps.app.goo.gl/vYyD8z4yE7vQ5p8A8" target="_blank" class="btn">📍 VER EN GOOGLE MAPS</a>
+        </div>
+    </section>
+
+
+    <section>
+        <div class="card">
+            <h1>Confirmación</h1>
+            <p style="margin-bottom: 20px;">¿Contamos con vosotros?</p>
+            
+            <div id="botones-iniciales">
+                <button class="btn" onclick="mostrarFormulario('Si')">SÍ, ASISTIRÉ</button>
+                <button class="btn" style="background:#888" onclick="mostrarFormulario('No')">NO PODRÉ IR</button>
+            </div>
+
+            <form id="weddingForm" class="hidden">
+                <input type="hidden" id="formAsiste">
+                
+                <div id="lista-invitados">
+                    <div class="persona-block">
+                        <p style="font-weight: 600; font-size: 0.9rem; color: var(--dorado); margin-bottom: 5px;">Tu nombre:</p>
+                        <input type="text" name="nombre" placeholder="Nombre y Apellidos" required>
+                        <p style="font-weight: 600; font-size: 0.9rem; color: var(--dorado); margin-top: 10px;">Alergias o Intolerancias:</p>
+                        <textarea name="alergias" placeholder="Indica si tienes o escribe 'No'" rows="2" required></textarea>
+                    </div>
+                </div>
+
+                <div id="extras-container">
+                    <button type="button" class="btn btn-add" onclick="agregarPersona()">+ AÑADIR ACOMPAÑANTE</button>
+                    
+                    <div style="text-align: left; margin-bottom: 20px;">
+                        <p style="font-weight: 600; font-size: 0.9rem; color: #555;">¿Necesitáis autobús?</p>
+                        <select id="transporteField" required>
+                            <option value="" disabled selected>Selecciona una opción</option>
+                            <option value="Arahal">Bus desde Arahal</option>
+                            <option value="Utrera">Bus desde Utrera</option>
+                            <option value="No">No necesito bus</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" id="submitBtn" class="btn" style="width:100%">CONFIRMAR ASISTENCIA</button>
+            </form>
+            
+            <p id="mensajeFinal" class="hidden" style="color: var(--dorado); font-weight: bold; font-size: 1.2rem; margin-top: 20px;">
+                ¡Genial!<br>Hemos recibido vuestra respuesta correctamente.
+            </p>
+        </div>
+    </section>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz1RHiBqOkQZx1UynTSThvo1cJXOSRPJLnOAvUoxQXPy0ZOwO3D0mMQVndlRbfilefxlw/exec';
+
+        function agregarPersona() {
+            const contenedor = document.getElementById('lista-invitados');
+            const nuevoBloque = document.createElement('div');
+            nuevoBloque.className = 'persona-block';
+            nuevoBloque.innerHTML = `
+                <button type="button" class="btn-eliminar" onclick="this.parentElement.remove()">✕ Quitar</button>
+                <p style="font-weight: 600; font-size: 0.9rem; color: var(--dorado); margin-bottom: 5px;">Acompañante:</p>
+                <input type="text" name="nombre" placeholder="Nombre y Apellidos" required>
+                <p style="font-weight: 600; font-size: 0.9rem; color: var(--dorado); margin-top: 10px;">Alergias o Intolerancias:</p>
+                <textarea name="alergias" placeholder="Indica si tiene o escribe 'No'" rows="2" required></textarea>
+            `;
+            contenedor.appendChild(nuevoBloque);
+        }
+
+        function mostrarFormulario(valor) {
+            document.getElementById('botones-iniciales').classList.add('hidden');
+            document.getElementById('weddingForm').classList.remove('hidden');
+            document.getElementById('formAsiste').value = valor;
+            
+            if(valor === 'No') {
+                document.getElementById('extras-container').classList.add('hidden');
+            }
+        }
+
+        document.getElementById('weddingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Registrando...";
+
+            const asiste = document.getElementById('formAsiste').value;
+            const transporte = document.getElementById('transporteField').value || 'N/A';
+            const nombres = document.getElementsByName('nombre');
+            const alergias = document.getElementsByName('alergias');
+
+            // Enviamos cada persona como una fila independiente
+            for (let i = 0; i < nombres.length; i++) {
+                const params = new URLSearchParams();
+                params.append('nombre', nombres[i].value);
+                params.append('asiste', asiste);
+                params.append('alergias', alergias[i].value);
+                params.append('transporte', transporte);
+                params.append('acompanantes', 'Individual');
+
+                await fetch(scriptURL + "?" + params.toString(), { method: 'POST', mode: 'no-cors' });
+            }
+
+            document.getElementById('weddingForm').classList.add('hidden');
+            document.getElementById('mensajeFinal').classList.remove('hidden');
+        });
+
+    </script>
+</body>
+</html>
