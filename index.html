@@ -31,6 +31,7 @@
             text-align: center;
             padding: 40px 20px;
             scroll-snap-align: start;
+            /* La foto debe llamarse fondo.jpg y estar en la misma carpeta en GitHub */
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('fondo.jpg');
             background-size: cover;
             background-position: center;
@@ -115,31 +116,31 @@
             border-radius: 50px;
             margin-top: 30px;
             border: 1px solid rgba(255,255,255,0.3);
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+
     <section class="portada">
-        <h1>Gabri   y   Bea</h1>
-        <h2>"Queremos que seas partícipe del día más importante de nuestras vidas"</h2>
-	<h1>2 de mayo 26</h1>
-	<h1>13:00</h1>
+        <h1>Gabri y Bea</h1>
+        <h2>02 · Mayo · 2026</h2>
+        <div id="countdown">Calculando días...</div>
     </section>
 
- <section>
+    <section>
         <div class="card">
             <h1>Ubicación</h1>
             <h2>Hacienda la Pintada</h2>
             <p style="color: #666; margin-bottom: 20px;">Carretera de Utrera a Arahal</p>
-            <a href="https://maps.app.goo.gl/vYyD8z4yE7vQ5p8A8" target="_blank" class="btn">📍 VER EN GOOGLE MAPS</a>
+            <a href="https://maps.google.com" target="_blank" class="btn">📍 VER EN GOOGLE MAPS</a>
         </div>
     </section>
-
 
     <section>
         <div class="card">
             <h1>Confirmación</h1>
-            <p style="margin-bottom: 20px;">¿Contamos con vosotros?</p>
+            <p style="margin-bottom: 20px;">¿Nos acompañáis en nuestro gran día?</p>
             
             <div id="botones-iniciales">
                 <button class="btn" onclick="mostrarFormulario('Si')">SÍ, ASISTIRÉ</button>
@@ -182,7 +183,8 @@
     </section>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz1RHiBqOkQZx1UynTSThvo1cJXOSRPJLnOAvUoxQXPy0ZOwO3D0mMQVndlRbfilefxlw/exec';
+        // 1. PEGA AQUÍ TU URL DE GOOGLE SCRIPT (LA QUE TERMINA EN /exec)
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwUBO-Jh8vZA_Uepc5rJYWi-xA1M-DjhHg_yrnaS3HkjPt0FdlBPOKLwysHilEe0FT8wQ/exec';
 
         function agregarPersona() {
             const contenedor = document.getElementById('lista-invitados');
@@ -205,6 +207,8 @@
             
             if(valor === 'No') {
                 document.getElementById('extras-container').classList.add('hidden');
+                // Si no asiste, quitamos el "required" del bus
+                document.getElementById('transporteField').required = false;
             }
         }
 
@@ -215,11 +219,11 @@
             btn.innerText = "Registrando...";
 
             const asiste = document.getElementById('formAsiste').value;
-            const transporte = document.getElementById('transporteField').value || 'N/A';
+            const transporte = document.getElementById('transporteField').value || 'No';
             const nombres = document.getElementsByName('nombre');
             const alergias = document.getElementsByName('alergias');
 
-            // Enviamos cada persona como una fila independiente
+            // Enviamos cada persona como una fila independiente esperando respuesta de Google
             for (let i = 0; i < nombres.length; i++) {
                 const params = new URLSearchParams();
                 params.append('nombre', nombres[i].value);
@@ -228,13 +232,35 @@
                 params.append('transporte', transporte);
                 params.append('acompanantes', 'Individual');
 
-                await fetch(scriptURL + "?" + params.toString(), { method: 'POST', mode: 'no-cors' });
+                try {
+                    await fetch(scriptURL + "?" + params.toString(), { 
+                        method: 'POST', 
+                        mode: 'no-cors' 
+                    });
+                } catch (err) {
+                    console.log("Error en envío individual");
+                }
             }
 
             document.getElementById('weddingForm').classList.add('hidden');
             document.getElementById('mensajeFinal').classList.remove('hidden');
         });
 
+        // Cuenta atrás dinámica
+        function timer() {
+            const boda = new Date(2026, 4, 2, 13, 0).getTime();
+            const ahora = new Date().getTime();
+            const diff = boda - ahora;
+            if (diff <= 0) {
+                document.getElementById("countdown").innerHTML = "¡ES HOY!";
+                return;
+            }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("countdown").innerHTML = `Faltan ${d} días y ${h} horas`;
+        }
+        setInterval(timer, 1000); 
+        timer();
     </script>
 </body>
 </html>
