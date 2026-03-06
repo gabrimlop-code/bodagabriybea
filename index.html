@@ -154,46 +154,49 @@
     </section>
 
     <section>
-        <div class="card">
-            <h1>Confirmación</h1>
-            <p style="margin-bottom: 20px;">¿Nos acompañáis en nuestro gran día?</p>
-            
-            <div id="botones-iniciales">
+<div class="card">
+    <h1>Confirmación</h1>
+    <p id="preguntaConfirmacion" style="margin-bottom: 20px;">¿Nos acompañáis en nuestro gran día?</p>
+    
+    <div id="botones-iniciales">
                 <button class="btn" onclick="mostrarFormulario('Si')">SÍ, ASISTIRÉ</button>
                 <button class="btn" style="background:#888" onclick="mostrarFormulario('No')">NO PODRÉ IR</button>
             </div>
 
-            <form id="weddingForm" class="hidden">
-                <input type="hidden" id="formAsiste">
-                
-                <div id="lista-invitados">
-                    <div class="persona-block">
-                        <p style="font-weight: 600; font-size: 0.9rem; color: var(--dorado); margin-bottom: 5px;">Tu nombre:</p>
-                        <input type="text" name="nombre" placeholder="Nombre y Apellidos" required>
-                        <p style="font-weight: 600; font-size: 0.9rem; color: var(--dorado); margin-top: 10px;">Alergias o Intolerancias:</p>
-                        <textarea name="alergias" placeholder="Indica si tienes o escribe 'No'" rows="2" required></textarea>
-                    </div>
-                </div>
+<form id="weddingForm" class="hidden">
+    <input type="hidden" id="formAsiste">
+    
+    <div id="lista-invitados">
+        <div class="persona-block">
+            <p style="font-weight: 600; font-size: 0.9rem; color: var(--dorado); margin-bottom: 5px;">Tu nombre:</p>
+            <input type="text" name="nombre" placeholder="Nombre y Apellidos" required>
+            
+            <div class="alergias-container">
+                <p style="font-weight: 600; font-size: 0.9rem; color: var(--dorado); margin-top: 10px;">Alergias o Intolerancias:</p>
+                <textarea name="alergias" placeholder="Indica si tienes o escribe 'No'" rows="2" required></textarea>
+            </div>
+        </div>
+    </div>
 
-                <div id="extras-container">
-                    <button type="button" class="btn btn-add" onclick="agregarPersona()">+ AÑADIR ACOMPAÑANTE</button>
-                    
-                    <div style="text-align: left; margin-bottom: 20px;">
-                        <p style="font-weight: 600; font-size: 0.9rem; color: #555;">¿Necesitáis autobús?</p>
-                        <select id="transporteField" required>
-                            <option value="" disabled selected>Selecciona una opción</option>
-                            <option value="Arahal">Bus desde Arahal</option>
-                            <option value="Utrera">Bus desde Utrera</option>
-                            <option value="No">No necesito bus</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <button type="submit" id="submitBtn" class="btn" style="width:100%">CONFIRMAR ASISTENCIA</button>
-            </form>
+    <div id="extras-container">
+        <button type="button" class="btn btn-add" onclick="agregarPersona()">+ AÑADIR ACOMPAÑANTE</button>
+        
+        <div style="text-align: left; margin-bottom: 20px;">
+            <p style="font-weight: 600; font-size: 0.9rem; color: #555;">¿Necesitáis autobús?</p>
+            <select id="transporteField">
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="Arahal">Bus desde Arahal</option>
+                <option value="Utrera">Bus desde Utrera</option>
+                <option value="No">No necesito bus</option>
+            </select>
+        </div>
+    </div>
+    
+    <button type="submit" id="submitBtn" class="btn" style="width:100%">ENVIAR RESPUESTA</button>
+</form>
             
             <p id="mensajeFinal" class="hidden" style="color: var(--dorado); font-weight: bold; font-size: 1.2rem; margin-top: 20px;">
-                ¡Genial!<br>Hemos recibido vuestra respuesta correctamente.
+                <br>Hemos recibido vuestra respuesta correctamente.
             </p>
         </div>
     </section>
@@ -216,17 +219,31 @@
             contenedor.appendChild(nuevoBloque);
         }
 
-        function mostrarFormulario(valor) {
-            document.getElementById('botones-iniciales').classList.add('hidden');
-            document.getElementById('weddingForm').classList.remove('hidden');
-            document.getElementById('formAsiste').value = valor;
-            
-            if(valor === 'No') {
-                document.getElementById('extras-container').classList.add('hidden');
-                // Si no asiste, quitamos el "required" del bus
-                document.getElementById('transporteField').required = false;
-            }
-        }
+       function mostrarFormulario(valor) {
+    document.getElementById('botones-iniciales').classList.add('hidden');
+    document.getElementById('weddingForm').classList.remove('hidden');
+    document.getElementById('formAsiste').value = valor;
+    
+    // Ocultamos la pregunta inicial siempre, ya que ya han pulsado un botón
+    document.getElementById('preguntaConfirmacion').classList.add('hidden');
+
+    const extras = document.getElementById('extras-container');
+    const busSelect = document.getElementById('transporteField');
+    const alergiasContenedores = document.querySelectorAll('.alergias-container');
+    const alergiasTextareas = document.getElementsByName('alergias');
+
+    if (valor === 'No') {
+        extras.classList.add('hidden');
+        alergiasContenedores.forEach(div => div.classList.add('hidden'));
+        alergiasTextareas.forEach(tx => tx.required = false);
+        busSelect.required = false;
+    } else {
+        extras.classList.remove('hidden');
+        alergiasContenedores.forEach(div => div.classList.remove('hidden'));
+        alergiasTextareas.forEach(tx => tx.required = true);
+        busSelect.required = true;
+    }
+}
 
         document.getElementById('weddingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -294,6 +311,11 @@
     </script>
 </body>
 </html>
+
+
+
+
+
 
 
 
